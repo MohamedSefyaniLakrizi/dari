@@ -17,7 +17,7 @@ supabase: {
     login: '/login',
     callback: '/confirm',
     include: undefined,
-    exclude: ['/','/about','/map2','/contact'],
+    exclude: ['/','/about','/search','/contact'],
     cookieRedirect: false,
   },
   cookieOptions: {
