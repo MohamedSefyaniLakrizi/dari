@@ -12,11 +12,13 @@
 </script>
 
 <template>
-  <header>
-    <div class="grid grid-cols-3 h-28">
+  <header class="z-50">
+    <div class="grid grid-cols-3 h-28 z-20">
       <div class=""></div>
       <div class="flex justify-center items-center text-3xl">Dari</div>
-      <ul class="hidden lg:flex lg:justify-end lg:gap-2 lg:m-5 lg:items-center">
+      <ul
+        class="hidden md:flex md:justify-end md:gap-2 md:m-5 md:items-center lg:text-lg lg:gap-5"
+      >
         <li>
           <NuxtLink to="/about"><p>about</p></NuxtLink>
         </li>
@@ -32,7 +34,7 @@
           </NuxtLink>
         </li>
       </ul>
-      <div class="flex lg:hidden justify-end mr-10 items-center">
+      <div class="flex md:hidden justify-end mr-10 items-center">
         <i
           @click="toggle_drawer"
           class="pi pi-bars flex text-xl cursor-pointer"

@@ -15,7 +15,12 @@
         class="pi pi-times flex text-xl cursor-pointer"
       />
     </div>
-    <ul>
+    <ul class="flex flex-col mt-5 ml-5 text-xl gap-3">
+      <li>
+        <NuxtLink to="/">
+          <p>home</p>
+        </NuxtLink>
+      </li>
       <li>
         <NuxtLink to="/about"><p>about</p></NuxtLink>
       </li>
@@ -24,11 +29,6 @@
       </li>
       <li>
         <NuxtLink to="/search"><p>search</p></NuxtLink>
-      </li>
-      <li>
-        <NuxtLink to="/">
-          <p>home</p>
-        </NuxtLink>
       </li>
     </ul>
   </div>

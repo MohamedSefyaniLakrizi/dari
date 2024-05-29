@@ -114,7 +114,7 @@
       </InputGroup>
     </div>
   </div>
-</template>
+</template> 
 
 <style>
   #map {
