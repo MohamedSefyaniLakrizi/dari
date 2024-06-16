@@ -6,6 +6,12 @@ export default defineNuxtConfig({
     pageTransition: { name: 'page', mode: 'out-in' }
   },
   modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxtjs/supabase'],
+  components: [
+    {
+      path: '~/components', // will get any components nested in let's say /components/test too
+      pathPrefix: false,
+    },
+  ],
   primevue: {
     options: {
       unstyled: true
@@ -17,7 +23,7 @@ supabase: {
     login: '/login',
     callback: '/confirm',
     include: undefined,
-    exclude: ['/','/about','/search','/contact'],
+    exclude: ['/','/about','/search','/contact','/search/*'],
     cookieRedirect: false,
   },
   cookieOptions: {
@@ -60,6 +66,8 @@ vite: {
       theme: {
           extend: {
               colors: {
+                  'primary-green': '#027223',
+                  'secondary-green': '#377302',
                   primary: 'rgb(var(--primary))',
                   'primary-inverse': 'rgb(var(--primary-inverse))',
                   'primary-hover': 'rgb(var(--primary-hover))',

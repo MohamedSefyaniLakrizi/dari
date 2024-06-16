@@ -12,7 +12,7 @@ onMounted(() => {
     language: "fr",
   });
 
-  geocoder.addTo("#geocoder");
+  //geocoder.addTo("#geocoder");
   // Get the geocoder results container.
   const results = document.getElementById("result");
 
@@ -31,29 +31,23 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex justify-center relative -z-10 -mt-[112px] md:mt-0">
-    <div class="w-full md:w-4/5 aspect-video 2xl:w-3/4">
+  <div class="flex justify-center">
+    <div
+      class="flex justify-center relative -z-10 -mt-[112px] md:mt-10 w-screen lg:w-[90%] 2xl:w-[80%]"
+    >
       <div
-        class="background-image h-full w-full md:rounded-lg shadow-md flex items-center justify-center md:justify-start md:items-end"
-      >
-        <div class="m-10">
-          <h1
-            class="md:text-left text-center text-2xl md:text-5xl text-white pl-5 w-96 font-bold"
-          >
-            Trouver votre maison de rêve en toute simplicité
-          </h1>
-          <div id="geocoder" class="z-10 m-5"></div>
-          <pre id="result"></pre>
-        </div>
-      </div>
+        class="background-image h-[600px] object-cover rounded-xl drop-shadow-2xl"
+      ></div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .background-image {
-  background-image: url("https://ztrbtjigrrjjylmcaykj.supabase.co/storage/v1/object/public/assets/you-deal-3xtkv4deqhE-unsplash__1_.jpg?t=2024-05-27T11%3A58%3A59.558Z");
+  background-image: url("https://ztrbtjigrrjjylmcaykj.supabase.co/storage/v1/object/public/assets/belle-vue-plus-grande-mosquee-casablanca-maroc-mosquee-hassan-ii.jpg?t=2024-06-07T17%3A15%3A48.972Z");
   background-size: cover;
-  background-position: center;
+  width: 100%;
+  object-position: right;
+  background-position: 50% 0%;
 }
 </style>

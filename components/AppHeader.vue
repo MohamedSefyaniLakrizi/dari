@@ -1,40 +1,75 @@
 <script setup lang="ts">
-  import { ref } from "vue";
-  import { useRoute } from "vue-router";
-  const showMobileMenu = ref(false);
-  const toggle_drawer = () => {
-    showMobileMenu.value = !showMobileMenu.value;
-  };
-  const route = useRoute();
-  watch(route, () => {
-    showMobileMenu.value = false;
-  });
+import { ref } from "vue";
+import { useRoute } from "vue-router";
+import Popup from "./authPopup/Popup.vue";
+const showMobileMenu = ref(false);
+const toggle_drawer = () => {
+  showMobileMenu.value = !showMobileMenu.value;
+};
+const route = useRoute();
+watch(route, () => {
+  showMobileMenu.value = false;
+});
+
+const scrolled = ref(false);
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll, { passive: true });
+});
+
+onUnmounted(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
+
+const handleScroll = () => {
+  if (route.path === "/") {
+    scrolled.value = window.scrollY > 200;
+  } else {
+    scrolled.value = false;
+  }
+};
 </script>
 
 <template>
-  <header class="z-50">
-    <div class="grid grid-cols-3 h-28 z-20">
-      <div class=""></div>
-      <div class="flex justify-center items-center text-3xl">Dari</div>
+  <header
+    class="bg-transparent md:bg-white md:border-b md:border-black md:border-opacity-10"
+  >
+    <div class="grid grid-cols-3 items-center h-28 md:h-20 z-20 mx-5 md:mx-16">
+      <div class="flex items-center">
+        <NuxtLink class="hidden md:block" to="/">
+          <img src="../assets/logo.svg" />
+        </NuxtLink>
+      </div>
+      <div class="flex items-center justify-center">
+        <NuxtLink class="md:hidden" to="/">
+          <img src="../assets/logo.svg" />
+        </NuxtLink>
+      </div>
       <ul
-        class="hidden md:flex md:justify-end md:gap-2 md:m-5 md:items-center lg:text-lg lg:gap-5"
+        class="hidden md:flex md:justify-end md:gap-2 md:items-center lg:text-lg lg:gap-5"
       >
         <li>
-          <NuxtLink to="/about"><p>about</p></NuxtLink>
+          <NuxtLink to="/about"
+            ><p class="font-semibold text-base">about</p></NuxtLink
+          >
         </li>
         <li>
-          <NuxtLink to="/contact"><p>contact</p></NuxtLink>
+          <NuxtLink to="/contact"
+            ><p class="font-semibold text-base">contact</p></NuxtLink
+          >
         </li>
         <li>
-          <NuxtLink to="/search"><p>search</p></NuxtLink>
+          <NuxtLink to="/search"
+            ><p class="font-semibold text-base">search</p></NuxtLink
+          >
         </li>
         <li>
-          <NuxtLink to="/">
-            <p>home</p>
+          <NuxtLink to="/login">
+            <p class="font-semibold text-base">se connecter</p>
           </NuxtLink>
         </li>
       </ul>
-      <div class="flex md:hidden justify-end mr-10 items-center">
+      <div class="flex md:hidden justify-end items-center">
         <i
           @click="toggle_drawer"
           class="pi pi-bars flex text-xl cursor-pointer"
@@ -53,4 +88,16 @@
       </transition>
     </div>
   </header>
+  <transition
+    enter-active-class="transition-transform ease-in-out duration-100"
+    enter-class="transform -translate-y-full"
+    enter-from-class="transform -translate-y-full"
+    enter-to-class="transform translate-y-0"
+    leave-active-class="transition-transform ease-in-out duration-100"
+    leave-class="transform translate-y-0"
+    leave-to-class="transform -translate-y-full"
+  >
+    <SearchBar v-if="scrolled" />
+  </transition>
+  <Popup />
 </template>

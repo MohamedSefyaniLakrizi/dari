@@ -1,7 +1,7 @@
 <script setup lang="ts">
-  import { defineProps, defineEmits } from "vue";
+import { defineProps, defineEmits } from "vue";
 
-  const emit = defineEmits(["toggle"]);
+const emit = defineEmits(["toggle"]);
 </script>
 
 <template>
@@ -9,7 +9,7 @@
     ref="mobile_menu"
     class="w-screen h-screen top-0 left-0 fixed z-[9999] bg-indigo-100"
   >
-    <div class="flex justify-end mt-[46px] mr-10 items-center">
+    <div class="flex justify-end mt-[46px] mr-5 items-center">
       <i
         @click="emit('toggle')"
         class="pi pi-times flex text-xl cursor-pointer"
