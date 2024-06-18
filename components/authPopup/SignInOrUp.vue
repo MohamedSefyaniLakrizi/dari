@@ -2,7 +2,10 @@
 import { inject } from "vue";
 
 const email = inject<string>("email") || "";
+let authPopup = inject<boolean>("authPopup") || false;
+
 const emit = defineEmits(["signInPopup", "signUpPopup", "openOtp"]);
+
 const supabase = useSupabaseClient();
 const signInWithGoogle = async () => {
   const { error } = await supabase.auth.signInWithOAuth({
@@ -31,7 +34,7 @@ const signInOrUp = async () => {
     emit("signUpPopup");
   } else {
     emit("openOtp");
-    console.log("Error checking email");
+    console.log("not confirmed email");
   }
 };
 </script>
@@ -39,6 +42,11 @@ const signInOrUp = async () => {
 <template>
   <form @submit.prevent="signInOrUp">
     <div class="mx-8 my-10">
+      <div class="flex justify-end items-center">
+        <div class="mb-5 w-max cursor-pointer">
+          <i class="pi pi-times" @click="authPopup = !authPopup"></i>
+        </div>
+      </div>
       <div class="">
         <h3 class="font-semibold text-lg">Créer un compte ou se connecter</h3>
         <h6 class="text-sm opacity-50">Commencez gratuitement</h6>

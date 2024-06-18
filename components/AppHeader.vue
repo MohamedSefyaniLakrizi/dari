@@ -1,17 +1,23 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, provide } from "vue";
 import { useRoute } from "vue-router";
 import Popup from "./authPopup/Popup.vue";
+const supabase = useSupabaseClient();
+const scrolled = ref(false);
 const showMobileMenu = ref(false);
+const authPopup = ref(false);
+const loggedIn = ref(false);
+provide("authPopup", authPopup);
 const toggle_drawer = () => {
   showMobileMenu.value = !showMobileMenu.value;
+};
+const toggle_auth = () => {
+  authPopup.value = !authPopup.value;
 };
 const route = useRoute();
 watch(route, () => {
   showMobileMenu.value = false;
 });
-
-const scrolled = ref(false);
 
 onMounted(() => {
   window.addEventListener("scroll", handleScroll, { passive: true });
@@ -28,6 +34,10 @@ const handleScroll = () => {
     scrolled.value = false;
   }
 };
+
+(await supabase.auth.getSession())
+  ? (loggedIn.value = true)
+  : (loggedIn.value = false);
 </script>
 
 <template>
@@ -64,9 +74,16 @@ const handleScroll = () => {
           >
         </li>
         <li>
-          <NuxtLink to="/login">
-            <p class="font-semibold text-base">se connecter</p>
-          </NuxtLink>
+          <p
+            class="font-semibold text-base cursor-pointer"
+            @click="toggle_auth"
+            v-if="!loggedIn"
+          >
+            se connecter
+          </p>
+          <p class="font-semibold text-base cursor-pointer" v-if="loggedIn">
+            profil
+          </p>
         </li>
       </ul>
       <div class="flex md:hidden justify-end items-center">
@@ -99,5 +116,15 @@ const handleScroll = () => {
   >
     <SearchBar v-if="scrolled" />
   </transition>
-  <Popup />
+  <transition
+    enter-active-class="transition-opacity ease-linear duration-100"
+    enter-class="opacity-0"
+    enter-from-class="opacity-0"
+    enter-to-class="opacity-100"
+    leave-active-class="transition-opacity ease-linear duration-100"
+    leave-class="opacity-100"
+    leave-to-class="opacity-0"
+  >
+    <Popup v-if="authPopup" />
+  </transition>
 </template>

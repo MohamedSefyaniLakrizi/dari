@@ -11,6 +11,7 @@ const countries = [
   { name: "🇺🇸 États-Unis", code: "🇺🇸 +1" },
   { name: "🇪🇸 Espagne", code: "🇪🇸 +34" },
 ];
+let authPopup = inject<boolean>("authPopup") || false;
 let firstName = inject<string>("firstName") || "";
 let lastName = inject<string>("lastName") || "";
 let email = inject<string>("email") || "";
@@ -18,7 +19,7 @@ let password = inject<string>("password") || "";
 const confirm_password = ref("");
 let selectedCountry = inject<any>("selectedCountry") || "";
 let phoneNumber = inject<any>("phoneNumber") || "";
-const emit = defineEmits(["goBack", "openOtp"]);
+const emit = defineEmits(["openOtp", "goBack"]);
 const primevue = usePrimeVue();
 if (primevue.config.locale) {
   primevue.config.locale.weak = "faible";
@@ -36,6 +37,7 @@ const signUp = async () => {
       severity: "error",
       summary: "Erreur",
       detail: "Les mots de passe ne correspondent pas",
+      life: 3000,
     });
     return;
   }
@@ -54,6 +56,7 @@ const signUp = async () => {
       severity: "error",
       summary: "Erreur",
       detail: "Cet email existe déjà",
+      life: 3000,
     });
     return;
   }
@@ -69,24 +72,27 @@ const signUp = async () => {
   console.log("phoneNumber ", phoneNumber);
   let selectedCountryValue = 0;
   if (selectedCountry._rawValue.code == "🇲🇦 +212") {
-    selectedCountry = 212;
+    selectedCountry = "212";
     console.log("selectedCountry ", 212);
   } else if (selectedCountry._rawValue.code == "🇫🇷 +44") {
-    selectedCountry = 44;
+    selectedCountry = "44";
     console.log("selectedCountry ", 44);
   } else if (selectedCountry._rawValue.code == "🇺🇸 +1") {
-    selectedCountry = 1;
+    selectedCountry = "1";
     console.log("selectedCountry ", 1);
   } else if (selectedCountry._rawValue.code == "🇪🇸 +34") {
-    selectedCountry = 34;
+    selectedCountry = "34";
     console.log("selectedCountry ", 34);
   }
   const { code, body } = await $fetch("/api/createAccount", {
     method: "post",
     body: {
-      // @ts-ignore
-      email: email.value,
-      password: password.value,
+      email: email,
+      password: password,
+      firstName: firstName,
+      lastName: lastName,
+      phoneNumber: phoneNumber,
+      countryCode: selectedCountry,
     },
   });
   if (code == 500) {
@@ -95,14 +101,15 @@ const signUp = async () => {
       severity: "error",
       summary: "Erreur",
       detail: body,
+      life: 3000,
     });
   } else {
     console.log("Sign up successful");
-
     toast.add({
       severity: "success",
       summary: "Succès",
       detail: "Un email de confirmation a été envoyé",
+      life: 3000,
     });
     emit("openOtp");
   }
@@ -114,8 +121,16 @@ const signUp = async () => {
     <div v-focustrap class="overflow-hidden">
       <Toast />
       <div class="mx-8 my-10">
-        <div class="mb-5 w-max cursor-pointer" @click="$emit('goBack')">
-          <i class="pi pi-arrow-left"></i>
+        <div class="flex justify-between items-center">
+          <div class="mb-5 w-max cursor-pointer" @click="$emit('goBack')">
+            <i class="pi pi-arrow-left"></i>
+          </div>
+          <div
+            class="mb-5 w-max cursor-pointer"
+            @click="authPopup = !authPopup"
+          >
+            <i class="pi pi-times"></i>
+          </div>
         </div>
         <h3 class="font-semibold text-lg">Créer votre compte</h3>
         <h6 class="text-sm opacity-50">Commencez gratuitement</h6>
