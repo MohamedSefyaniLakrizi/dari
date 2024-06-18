@@ -1,110 +1,120 @@
-import path from 'path';
+import path from "path";
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   devtools: { enabled: true },
   app: {
-    pageTransition: { name: 'page', mode: 'out-in' }
+    pageTransition: { name: "page", mode: "out-in" },
   },
-  modules: ['@nuxtjs/tailwindcss', 'nuxt-primevue', '@nuxtjs/supabase'],
+  modules: ["@nuxtjs/tailwindcss", "nuxt-primevue", "@nuxtjs/supabase"],
   components: [
     {
-      path: '~/components', // will get any components nested in let's say /components/test too
+      path: "~/components", // will get any components nested in let's say /components/test too
       pathPrefix: false,
     },
   ],
   primevue: {
     options: {
-      unstyled: true
+      unstyled: true,
     },
-    importPT: { from: path.resolve(__dirname, './presets/aura/') }      //import and apply preset   
-},
-supabase: {
-  redirectOptions: {
-    login: '/login',
-    callback: '/confirm',
-    include: undefined,
-    exclude: ['/','/about','/search','/contact','/search/*'],
-    cookieRedirect: false,
+    importPT: { from: path.resolve(__dirname, "./presets/aura/") }, //import and apply preset
   },
-  cookieOptions: {
-    maxAge: 60 * 60 * 8,
-    sameSite: 'lax',
-    secure: true,
-  },
-  clientOptions: {
-    auth: {
-      flowType: 'pkce',
-      detectSessionInUrl: true,
-      persistSession: true,
-      autoRefreshToken: true
+  supabase: {
+    redirectOptions: {
+      login: "/login",
+      callback: "/confirm",
+      include: undefined,
+      exclude: ["/", "/about", "/search", "/contact", "/search/*"],
+      cookieRedirect: false,
+    },
+    cookieOptions: {
+      maxAge: 60 * 60 * 8,
+      sameSite: "lax",
+      secure: true,
+    },
+    clientOptions: {
+      auth: {
+        flowType: "pkce",
+        detectSessionInUrl: true,
+        persistSession: true,
+        autoRefreshToken: true,
+      },
     },
   },
-},
-vite: {
-  ssr: {
-    noExternal: ['mapbox-gl']
+  vite: {
+    ssr: {
+      noExternal: ["mapbox-gl"],
+    },
+    resolve: {
+      alias: {
+        "mapbox-gl": "mapbox-gl/dist/mapbox-gl.js",
+      },
+    },
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@import "mapbox-gl/dist/mapbox-gl.css";`,
+        },
+      },
+    },
   },
-  resolve: {
-    alias: {
-      'mapbox-gl': 'mapbox-gl/dist/mapbox-gl.js'
-    }
-  },
-  css: {
-    preprocessorOptions: {
-      scss: {
-        additionalData: `@import "mapbox-gl/dist/mapbox-gl.css";`
-      }
-    }
-  }
-},
   tailwindcss: {
     config: {
-      darkMode: 'class', // This enables dark mode based on the presence of the "dark" class in the HTML tag
+      darkMode: "class", // This enables dark mode based on the presence of the "dark" class in the HTML tag
       content: [
-          "presets/**/*.{js,vue,ts}" // this is optional if you are using @nuxtjs/tailwindcss
+        "presets/**/*.{js,vue,ts}", // this is optional if you are using @nuxtjs/tailwindcss
       ],
       theme: {
-          extend: {
-              colors: {
-                  'primary-green': '#027223',
-                  'secondary-green': '#377302',
-                  primary: 'rgb(var(--primary))',
-                  'primary-inverse': 'rgb(var(--primary-inverse))',
-                  'primary-hover': 'rgb(var(--primary-hover))',
-                  'primary-active-color': 'rgb(var(--primary-active-color))',
-  
-                  'primary-highlight': 'rgb(var(--primary)/var(--primary-highlight-opacity))',
-                  'primary-highlight-inverse': 'rgb(var(--primary-highlight-inverse))',
-                  'primary-highlight-hover': 'rgb(var(--primary)/var(--primary-highlight-hover-opacity))',
-  
-                  'primary-50': 'rgb(var(--primary-50))',
-                  'primary-100': 'rgb(var(--primary-100))',
-                  'primary-200': 'rgb(var(--primary-200))',
-                  'primary-300': 'rgb(var(--primary-300))',
-                  'primary-400': 'rgb(var(--primary-400))',
-                  'primary-500': 'rgb(var(--primary-500))',
-                  'primary-600': 'rgb(var(--primary-600))',
-                  'primary-700': 'rgb(var(--primary-700))',
-                  'primary-800': 'rgb(var(--primary-800))',
-                  'primary-900': 'rgb(var(--primary-900))',
-                  'primary-950': 'rgb(var(--primary-950))',
-  
-                  'surface-0': 'rgb(var(--surface-0))',
-                  'surface-50': 'rgb(var(--surface-50))',
-                  'surface-100': 'rgb(var(--surface-100))',
-                  'surface-200': 'rgb(var(--surface-200))',
-                  'surface-300': 'rgb(var(--surface-300))',
-                  'surface-400': 'rgb(var(--surface-400))',
-                  'surface-500': 'rgb(var(--surface-500))',
-                  'surface-600': 'rgb(var(--surface-600))',
-                  'surface-700': 'rgb(var(--surface-700))',
-                  'surface-800': 'rgb(var(--surface-800))',
-                  'surface-900': 'rgb(var(--surface-900))',
-                  'surface-950': 'rgb(var(--surface-950))'
-              }
-          }
-      }
-  
-    }
+        extend: {
+          colors: {
+            "primary-green": "#027223",
+            "secondary-green": "#377302",
+            primary: "rgb(var(--primary))",
+            "primary-inverse": "rgb(var(--primary-inverse))",
+            "primary-hover": "rgb(var(--primary-hover))",
+            "primary-active-color": "rgb(var(--primary-active-color))",
+
+            "primary-highlight":
+              "rgb(var(--primary)/var(--primary-highlight-opacity))",
+            "primary-highlight-inverse":
+              "rgb(var(--primary-highlight-inverse))",
+            "primary-highlight-hover":
+              "rgb(var(--primary)/var(--primary-highlight-hover-opacity))",
+
+            "primary-50": "rgb(var(--primary-50))",
+            "primary-100": "rgb(var(--primary-100))",
+            "primary-200": "rgb(var(--primary-200))",
+            "primary-300": "rgb(var(--primary-300))",
+            "primary-400": "rgb(var(--primary-400))",
+            "primary-500": "rgb(var(--primary-500))",
+            "primary-600": "rgb(var(--primary-600))",
+            "primary-700": "rgb(var(--primary-700))",
+            "primary-800": "rgb(var(--primary-800))",
+            "primary-900": "rgb(var(--primary-900))",
+            "primary-950": "rgb(var(--primary-950))",
+
+            "surface-0": "rgb(var(--surface-0))",
+            "surface-50": "rgb(var(--surface-50))",
+            "surface-100": "rgb(var(--surface-100))",
+            "surface-200": "rgb(var(--surface-200))",
+            "surface-300": "rgb(var(--surface-300))",
+            "surface-400": "rgb(var(--surface-400))",
+            "surface-500": "rgb(var(--surface-500))",
+            "surface-600": "rgb(var(--surface-600))",
+            "surface-700": "rgb(var(--surface-700))",
+            "surface-800": "rgb(var(--surface-800))",
+            "surface-900": "rgb(var(--surface-900))",
+            "surface-950": "rgb(var(--surface-950))",
+          },
+        },
+      },
+    },
   },
-})
+  postcss: {
+    plugins: {
+      "postcss-import": {},
+      "tailwindcss/nesting": {},
+      tailwindcss: {},
+      autoprefixer: {},
+    },
+  },
+});

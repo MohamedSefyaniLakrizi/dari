@@ -111,46 +111,58 @@ const toggle = (event: any) => {
         class="hidden md:flex md:justify-end md:gap-2 md:items-center lg:text-lg lg:gap-5"
       >
         <li>
-          <NuxtLink to="/about"
-            ><p class="font-semibold text-base">about</p></NuxtLink
-          >
+          <NuxtLink to="/about">
+            <Button label="about" severity="primary"
+          /></NuxtLink>
         </li>
         <li>
           <NuxtLink to="/contact"
-            ><p class="font-semibold text-base">contact</p></NuxtLink
-          >
+            ><Button label="contact" severity="primary"
+          /></NuxtLink>
         </li>
         <li>
           <NuxtLink to="/search"
-            ><p class="font-semibold text-base">search</p></NuxtLink
-          >
+            ><Button label="search" severity="primary"
+          /></NuxtLink>
         </li>
         <li v-if="loggedIn">
           <NuxtLink to="/sell"
-            ><p class="font-semibold text-base text-nowrap">vendre ou louer</p>
+            ><Button
+              class="text-nowrap"
+              label="gérer vos propriétés"
+              severity="primary"
+            />
           </NuxtLink>
         </li>
         <li
-          class="flex items-center font-semibold text-base cursor-pointer"
+          class="flex items-center font-medium text-base cursor-pointer"
           v-if="!loggedIn"
           @click="toggle_auth"
         >
-          <i class="pi pi-users text-lg mr-1" />
-          <p>se connecter</p>
+          <Button label="se connecter" severity="primary">
+            <i class="pi pi-users text-lg mr-1" />
+            <p class="text-lg">se connecter</p>
+          </Button>
         </li>
         <li
-          class="flex items-center font-semibold text-base cursor-pointer"
+          class="flex items-center font-medium text-base cursor-pointer"
           v-if="loggedIn"
           @click="toggle"
         >
-          <i
-            class="pi pi-user text-xl mr-1"
-            aria-haspopup="true"
-            aria-controls="overlay_menu"
-          />
-          <p>{{ session.data.session?.user.user_metadata.first_name }}</p>
+          <Button severity="primary">
+            <i
+              class="pi pi-user text-xl mr-1"
+              aria-haspopup="true"
+              aria-controls="overlay_menu"
+            />
+            <p class="lg:text-lg">
+              {{
+                session.data.session?.user.user_metadata.first_name || "menu"
+              }}
+            </p>
+          </Button>
           <Menu
-            class="translate-y-2"
+            class="translate-y-2 lg:-translate-x-16"
             ref="menu"
             id="overlay_menu"
             :model="items"
