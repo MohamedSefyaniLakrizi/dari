@@ -9,6 +9,7 @@ export default defineEventHandler(async (event) => {
   const body = await readBody(event);
   const email = body.email._value;
   const password = body.password._value;
+
   const { error } = await supabase.auth.signInWithPassword({
     email,
     password,

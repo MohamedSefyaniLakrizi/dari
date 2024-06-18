@@ -4,9 +4,34 @@ let authPopup = inject<boolean>("authPopup") || false;
 const emit = defineEmits(["openOtp", "goBack"]);
 const email = inject<string>("email") || "";
 const password = ref("");
+const supabase = useSupabaseClient();
 
 const signIn = async () => {
-  const { code, body } = await $fetch("/api/signIn", {
+  console.log("email ", email.value);
+  const emailSubmit = email.value;
+  console.log("password ", password.value);
+  const { error } = await supabase.auth.signInWithPassword({
+    email: emailSubmit,
+    password: password.value,
+  });
+  if (error) {
+    console.error("Error signing in:", error.message);
+    toast.add({
+      severity: "error",
+      summary: "Erreur",
+      detail: "email ou mot de passe incorrect",
+      life: 3000,
+    });
+  } else {
+    console.log("Sign in successful");
+    toast.add({
+      severity: "success",
+      summary: "Succès",
+      detail: "Vous êtes connecté",
+      life: 3000,
+    });
+  }
+  /*const { code, body } = await $fetch("/api/signIn", {
     method: "post",
     body: {
       email: email,
@@ -29,7 +54,7 @@ const signIn = async () => {
       detail: "Vous êtes connecté",
       life: 3000,
     });
-  }
+  }*/
 };
 </script>
 

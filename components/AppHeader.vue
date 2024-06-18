@@ -3,10 +3,49 @@ import { ref, provide } from "vue";
 import { useRoute } from "vue-router";
 import Popup from "./authPopup/Popup.vue";
 const supabase = useSupabaseClient();
+const session = await supabase.auth.getSession();
 const scrolled = ref(false);
 const showMobileMenu = ref(false);
 const authPopup = ref(false);
 const loggedIn = ref(false);
+const menu = ref();
+const items: any = ref([
+  {
+    label: "profil",
+    icon: "pi pi-fw pi-user",
+    command: () => {
+      navigateTo("/profile");
+    },
+  },
+  {
+    label: "vos annonces",
+    icon: "pi pi-fw pi-th-large",
+    command: () => {
+      navigateTo("/dashboard");
+    },
+  },
+  {
+    label: "paramètres",
+    icon: "pi pi-fw pi-cog",
+    command: () => {
+      navigateTo("/settings");
+    },
+  },
+  {
+    label: "aide",
+    icon: "pi pi-fw pi-question-circle",
+    command: () => {
+      navigateTo("/help");
+    },
+  },
+  {
+    label: "déconnexion",
+    icon: "pi pi-fw pi-sign-out",
+    command: () => {
+      supabase.auth.signOut();
+    },
+  },
+]);
 provide("authPopup", authPopup);
 const toggle_drawer = () => {
   showMobileMenu.value = !showMobileMenu.value;
@@ -19,8 +58,13 @@ watch(route, () => {
   showMobileMenu.value = false;
 });
 
-onMounted(() => {
+onMounted(async () => {
   window.addEventListener("scroll", handleScroll, { passive: true });
+  const session = await supabase.auth.getSession();
+  session.data.session?.access_token
+    ? (loggedIn.value = true)
+    : (loggedIn.value = false);
+  console.log("menu ", session.data.session?.user.user_metadata.first_name);
 });
 
 onUnmounted(() => {
@@ -35,9 +79,17 @@ const handleScroll = () => {
   }
 };
 
-(await supabase.auth.getSession())
-  ? (loggedIn.value = true)
-  : (loggedIn.value = false);
+supabase.auth.onAuthStateChange((event, session) => {
+  if (event === "SIGNED_IN") {
+    loggedIn.value = true;
+  } else {
+    loggedIn.value = false;
+  }
+});
+
+const toggle = (event: any) => {
+  menu.value.toggle(event);
+};
 </script>
 
 <template>
@@ -73,17 +125,37 @@ const handleScroll = () => {
             ><p class="font-semibold text-base">search</p></NuxtLink
           >
         </li>
-        <li>
-          <p
-            class="font-semibold text-base cursor-pointer"
-            @click="toggle_auth"
-            v-if="!loggedIn"
-          >
-            se connecter
-          </p>
-          <p class="font-semibold text-base cursor-pointer" v-if="loggedIn">
-            profil
-          </p>
+        <li v-if="loggedIn">
+          <NuxtLink to="/sell"
+            ><p class="font-semibold text-base text-nowrap">vendre ou louer</p>
+          </NuxtLink>
+        </li>
+        <li
+          class="flex items-center font-semibold text-base cursor-pointer"
+          v-if="!loggedIn"
+          @click="toggle_auth"
+        >
+          <i class="pi pi-users text-lg mr-1" />
+          <p>se connecter</p>
+        </li>
+        <li
+          class="flex items-center font-semibold text-base cursor-pointer"
+          v-if="loggedIn"
+          @click="toggle"
+        >
+          <i
+            class="pi pi-user text-xl mr-1"
+            aria-haspopup="true"
+            aria-controls="overlay_menu"
+          />
+          <p>{{ session.data.session?.user.user_metadata.first_name }}</p>
+          <Menu
+            class="translate-y-2"
+            ref="menu"
+            id="overlay_menu"
+            :model="items"
+            :popup="true"
+          />
         </li>
       </ul>
       <div class="flex md:hidden justify-end items-center">

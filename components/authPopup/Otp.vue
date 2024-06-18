@@ -3,13 +3,10 @@ import { inject, ref } from "vue";
 import { useToast } from "primevue/usetoast";
 const toast = useToast();
 let authPopup = inject<boolean>("authPopup") || false;
-const firstName = inject<string>("firstName") || "";
-const lastName = inject<string>("lastName") || "";
 const email = inject<string>("email") || "";
-const selectedCountry = inject<any>("selectedCountry") || "";
-const phoneNumber = inject<any>("phoneNumber") || "";
+const password = inject<string>("password") || "";
 const otpValue = ref("");
-
+const supabase = useSupabaseClient();
 const submitOtp = async () => {
   const { code, body } = await $fetch("/api/confirmAccount", {
     method: "post",
@@ -18,7 +15,11 @@ const submitOtp = async () => {
       token: otpValue,
     },
   });
-  if (code == 500) {
+  const { error } = await supabase.auth.signInWithPassword({
+    email: email.value,
+    password: password.value,
+  });
+  if (code == 500 || error) {
     console.error("Error signing up", body);
     toast.add({
       severity: "error",
@@ -28,6 +29,7 @@ const submitOtp = async () => {
     });
   } else {
     console.log("Sign up successful");
+
     toast.add({
       severity: "success",
       summary: "Succès",
