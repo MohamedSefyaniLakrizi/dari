@@ -126,7 +126,7 @@ onMounted(() => {
   </div>
 </template>
 
-<style>
+<style scoped>
 #map {
   height: 90vh;
   width: 50vw !important;

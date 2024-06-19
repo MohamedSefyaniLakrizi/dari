@@ -7,10 +7,11 @@ const supabase = createClient(
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  const city = body.city._value;
+  const city = body.city;
+  console.log(city);
   const { data, error } = await supabase
     .from("cities")
-    .select("city")
+    .select()
     .eq("city", city)
     .single();
   if (data === null) {

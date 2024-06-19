@@ -89,6 +89,7 @@ let sellOrLoanData = inject("sellOrLoanData");
           }
           $emit('moveToChooseLocation');
         "
+        :disabled="!loanClicked && !sellClicked"
       />
     </div>
   </div>

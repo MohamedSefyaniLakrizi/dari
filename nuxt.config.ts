@@ -5,7 +5,7 @@ export default defineNuxtConfig({
   app: {
     pageTransition: { name: "page", mode: "out-in" },
   },
-  modules: ["@nuxtjs/tailwindcss", "nuxt-primevue", "@nuxtjs/supabase"],
+  modules: ["@nuxtjs/tailwindcss", "@primevue/nuxt-module", "@nuxtjs/supabase"],
   components: [
     {
       path: "~/components", // will get any components nested in let's say /components/test too
